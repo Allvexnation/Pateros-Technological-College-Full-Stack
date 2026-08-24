@@ -1,5 +1,6 @@
 package com.pateros.backend;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -8,12 +9,13 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @ConfigurationPropertiesScan
 public class BackendApplication {
 
-	public static void main(String[] args) {
-		String mongodbUri = System.getenv("MONGODB_URI");
-		String cloudinaryCloudName = System.getenv("CLOUDINARY_CLOUD_NAME");
-		String cloudinaryApiKey = System.getenv("CLOUDINARY_API_KEY");
-		String cloudinaryApiSecret = System.getenv("CLOUDINARY_API_SECRET");
-		String apisEnv = System.getenv("APIS_ENV");
+	static {
+		Dotenv dotenv = Dotenv.load();
+		String mongodbUri = dotenv.get("MONGODB_URI");
+		String cloudinaryCloudName = dotenv.get("CLOUDINARY_CLOUD_NAME");
+		String cloudinaryApiKey = dotenv.get("CLOUDINARY_API_KEY");
+		String cloudinaryApiSecret = dotenv.get("CLOUDINARY_API_SECRET");
+		String apisEnv = dotenv.get("APIS_ENV");
 
 		if (mongodbUri != null) {
 			System.setProperty("spring.data.mongodb.uri", mongodbUri);
@@ -30,7 +32,9 @@ public class BackendApplication {
 		if (apisEnv != null) {
 			System.setProperty("apis.env", apisEnv);
 		}
+	}
 
+	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 	}
 

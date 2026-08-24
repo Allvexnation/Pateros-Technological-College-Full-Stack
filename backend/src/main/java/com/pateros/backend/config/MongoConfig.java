@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackages = "com.pateros.backend.repository")
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
-    private final Dotenv dotenv = Dotenv.load();
+    private final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
     @Override
     protected String getDatabaseName() {
@@ -23,6 +23,9 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     @Bean
     public MongoClient mongoClient() {
         String mongodbUri = dotenv.get("MONGODB_URI");
+        if (mongodbUri == null) {
+            mongodbUri = System.getenv("MONGODB_URI");
+        }
         return MongoClients.create(mongodbUri);
     }
 }

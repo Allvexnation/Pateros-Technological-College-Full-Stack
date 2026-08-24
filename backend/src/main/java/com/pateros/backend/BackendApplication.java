@@ -21,7 +21,17 @@ public class BackendApplication {
 			System.setProperty("CLOUDINARY_API_SECRET", dotenv.get("CLOUDINARY_API_SECRET"));
 			System.setProperty("APIS_ENV", dotenv.get("APIS_ENV"));
 		} catch (Exception e) {
+			String mongodbUri = System.getenv("MONGODB_URI");
+			String cloudinaryCloudName = System.getenv("CLOUDINARY_CLOUD_NAME");
+			String cloudinaryApiKey = System.getenv("CLOUDINARY_API_KEY");
+			String cloudinaryApiSecret = System.getenv("CLOUDINARY_API_SECRET");
+			String apisEnv = System.getenv("APIS_ENV");
 
+			if (mongodbUri != null) System.setProperty("MONGODB_URI", mongodbUri);
+			if (cloudinaryCloudName != null) System.setProperty("CLOUDINARY_CLOUD_NAME", cloudinaryCloudName);
+			if (cloudinaryApiKey != null) System.setProperty("CLOUDINARY_API_KEY", cloudinaryApiKey);
+			if (cloudinaryApiSecret != null) System.setProperty("CLOUDINARY_API_SECRET", cloudinaryApiSecret);
+			if (apisEnv != null) System.setProperty("APIS_ENV", apisEnv);
 		}
 
 		SpringApplication.run(BackendApplication.class, args);

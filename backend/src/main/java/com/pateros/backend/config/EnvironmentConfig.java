@@ -1,13 +1,12 @@
 package com.pateros.backend.config;
 
-import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Component;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
-@Component
-public class EnvironmentConfig {
+public class EnvironmentInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    @PostConstruct
-    public void init() {
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
         String mongodbUri = System.getenv("MONGODB_URI");
         String cloudinaryCloudName = System.getenv("CLOUDINARY_CLOUD_NAME");
         String cloudinaryApiKey = System.getenv("CLOUDINARY_API_KEY");

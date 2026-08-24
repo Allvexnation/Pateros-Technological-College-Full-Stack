@@ -1,0 +1,22 @@
+export const missionVisionData = {
+    vision: "Pateros Technological College envisions itself as an institution of higher learning which is strongly committed to the holistic development of the students to improve their lives in particular and the society in general.",
+    core_values: [
+        "Responsibility",
+        "Creativity",
+        "Integrity",
+        "Commitment",
+        "Compassion",
+        "Excellence",
+        "Environment Concern"
+    ],
+    mission: [
+        "Provide quality higher education through specialized professional instruction.",
+        "Provide training in scientific, technological, industrial and vocational fields.",
+        "Enhance moral and spiritual values.",
+        "Instill the love of country and appreciation of the Filipino cultural heritage.",
+        "Promote environmental awareness and unconditional love for Mother Earth.",
+        "Offer educational opportunities especially to marginalized individuals.",
+        "Heighten students' creativity and leadership through extra and co-curricular activities.",
+        "Produce quality graduates adept with technological skills and professional education."
+    ]
+};

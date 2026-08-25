@@ -244,7 +244,7 @@ export async function saveEditedAdminWithoutPassword() {
             const formData = new FormData();
             formData.append('file', window.editAdminPhotoFile);
             
-            const uploadResponse = await fetch('http://localhost:8080/api/admin/upload-photo', {
+            const uploadResponse = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/admin/upload-photo', {
                 method: 'POST',
                 body: formData
             });
@@ -261,7 +261,7 @@ export async function saveEditedAdminWithoutPassword() {
             }
         }
         
-        const response = await fetch(`http://localhost:8080/api/admin/admins/${id}`, {
+        const response = await fetch(`https://pateros-technological-college-full-stack.onrender.com/api/admin/admins/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -325,7 +325,7 @@ export async function saveEditedAdminWithPassword(superadminPassword) {
             const formData = new FormData();
             formData.append('file', window.editAdminPhotoFile);
             
-            const uploadResponse = await fetch('http://localhost:8080/api/admin/upload-photo', {
+            const uploadResponse = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/admin/upload-photo', {
                 method: 'POST',
                 body: formData
             });
@@ -342,7 +342,7 @@ export async function saveEditedAdminWithPassword(superadminPassword) {
             }
         }
         
-        const response = await fetch(`http://localhost:8080/api/admin/admins/${id}`, {
+        const response = await fetch(`https://pateros-technological-college-full-stack.onrender.com/api/admin/admins/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

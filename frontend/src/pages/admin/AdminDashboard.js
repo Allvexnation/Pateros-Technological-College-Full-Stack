@@ -202,7 +202,7 @@ export function initAdminDashboardPage() {
                 formData.append('file', file);
                 
                 try {
-                    const response = await fetch('http://localhost:8080/api/admin/upload-photo', {
+                    const response = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/admin/upload-photo', {
                         method: 'POST',
                         body: formData
                     });
@@ -235,7 +235,7 @@ export function initAdminDashboardPage() {
 
 async function loadDashboardData(token) {
     try {
-        const response = await fetch('http://localhost:8080/api/admin/dashboard', {
+        const response = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/admin/dashboard', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -305,7 +305,7 @@ async function saveProfile() {
     const messageDiv = document.getElementById('editMessage');
     
     try {
-        const response = await fetch(`http://localhost:8080/api/admin/admins/${adminData.id}`, {
+        const response = await fetch(`https://pateros-technological-college-full-stack.onrender.com/api/admin/admins/${adminData.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

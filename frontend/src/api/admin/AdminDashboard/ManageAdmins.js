@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:8080/api/admin';
+const API_BASE = 'https://pateros-technological-college-full-stack.onrender.com/api/admin';
 
 export async function getAllAdmins(token) {
     const response = await fetch(`${API_BASE}/admins`, {

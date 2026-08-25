@@ -193,7 +193,7 @@ export function initStudentDashboardPage() {
                 formData.append('file', file);
                 
                 try {
-                    const response = await fetch('http://localhost:8080/api/auth/upload-photo', {
+                    const response = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/auth/upload-photo', {
                         method: 'POST',
                         body: formData
                     });
@@ -245,7 +245,7 @@ async function saveProfile() {
     const messageDiv = document.getElementById('editMessage');
     
     try {
-        const response = await fetch(`http://localhost:8080/api/auth/students/${userData.id}`, {
+        const response = await fetch(`https://pateros-technological-college-full-stack.onrender.com/api/auth/students/${userData.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

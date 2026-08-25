@@ -1,6 +1,6 @@
 import { getCurrentUser, isAuthenticated } from '../../auth/auth.js';
 
-const STUDENT_DASHBOARD_API_BASE_URL = 'http://localhost:8080/api/home';
+const STUDENT_DASHBOARD_API_BASE_URL = 'https://pateros-technological-college-full-stack.onrender.com/api/home';
 
 export let editUploadedPhotoUrl = '';
 

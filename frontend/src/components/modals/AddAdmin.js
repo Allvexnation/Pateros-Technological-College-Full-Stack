@@ -123,7 +123,7 @@ export async function createNewAdmin() {
     }
     
     try {
-        const response = await fetch('http://localhost:8080/api/admin/admins', {
+        const response = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/admin/admins', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

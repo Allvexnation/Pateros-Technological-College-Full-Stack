@@ -1,5 +1,6 @@
 package com.pateros.backend.service;
 
+import com.pateros.backend.exception.ResourceNotFoundException;
 import com.pateros.backend.model.User;
 import com.pateros.backend.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,10 +19,10 @@ public class UserService {
     
     public User signup(String username, String email, String password) {
         if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("Email already exists");
+            throw new ResourceNotFoundException("Email already exists");
         }
         if (userRepository.existsByUsername(username)) {
-            throw new RuntimeException("Username already exists");
+            throw new ResourceNotFoundException("Username already exists");
         }
         
         User user = new User(username, email, passwordEncoder.encode(password));
@@ -30,10 +31,10 @@ public class UserService {
     
     public User signup(String username, String email, String password, String profilePhotoUrl) {
         if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("Email already exists");
+            throw new ResourceNotFoundException("Email already exists");
         }
         if (userRepository.existsByUsername(username)) {
-            throw new RuntimeException("Username already exists");
+            throw new ResourceNotFoundException("Username already exists");
         }
         
         User user = new User(username, email, passwordEncoder.encode(password), profilePhotoUrl);
@@ -43,10 +44,10 @@ public class UserService {
     public User login(String email, String password) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new RuntimeException("User not found");
+            throw new ResourceNotFoundException("User", "email", email);
         }
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new ResourceNotFoundException("Invalid password");
         }
         return user;
     }
@@ -56,10 +57,8 @@ public class UserService {
     }
     
     public User updateUser(String id, String username, String email, String profilePhotoUrl) {
-        User user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-            throw new RuntimeException("User not found");
-        }
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         
         if (username != null && !username.isEmpty()) {
             user.setUsername(username);

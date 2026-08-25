@@ -16,8 +16,13 @@ public class AdminSeeder implements CommandLineRunner {
     
     @Override
     public void run(String... args) {
-        if (adminRepository.count() == 0) {
-            seedAdmins();
+        try {
+            if (adminRepository.count() == 0) {
+                seedAdmins();
+            }
+        } catch (Exception e) {
+            System.out.println("Warning: Could not connect to MongoDB for admin seeding. Skipping seeder.");
+            System.out.println("Error: " + e.getMessage());
         }
     }
     

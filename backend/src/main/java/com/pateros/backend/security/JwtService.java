@@ -1,4 +1,4 @@
-package com.pateros.backend.util;
+package com.pateros.backend.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
-public class JwtUtil {
+public class JwtService {
     
     private static final long JWT_TOKEN_VALIDITY = 365L * 24 * 60 * 60 * 1000;
     private final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);

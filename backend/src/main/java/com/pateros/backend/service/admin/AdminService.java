@@ -1,5 +1,6 @@
 package com.pateros.backend.service.admin;
 
+import com.pateros.backend.exception.ResourceNotFoundException;
 import com.pateros.backend.model.admin.Admin;
 import com.pateros.backend.repository.admin.AdminRepository;
 import org.springframework.stereotype.Service;
@@ -48,71 +49,59 @@ public class AdminService {
     }
     
     public Admin updateAdmin(String id, String username, String email, String profilePhotoUrl, String department) {
-        Optional<Admin> adminOptional = adminRepository.findById(id);
-        if (adminOptional.isPresent()) {
-            Admin admin = adminOptional.get();
-            admin.setUsername(username);
-            admin.setEmail(email);
-            admin.setProfilePhotoUrl(profilePhotoUrl);
-            admin.setDepartment(department);
-            return adminRepository.save(admin);
-        }
-        return null;
+        Admin admin = adminRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Admin", "id", id));
+        admin.setUsername(username);
+        admin.setEmail(email);
+        admin.setProfilePhotoUrl(profilePhotoUrl);
+        admin.setDepartment(department);
+        return adminRepository.save(admin);
     }
     
     public Admin updateAdmin(String id, String username, String email, String profilePhotoUrl, String department, String editedBy) {
-        Optional<Admin> adminOptional = adminRepository.findById(id);
-        if (adminOptional.isPresent()) {
-            Admin admin = adminOptional.get();
-            admin.setUsername(username);
-            admin.setEmail(email);
-            admin.setProfilePhotoUrl(profilePhotoUrl);
-            admin.setDepartment(department);
-            admin.setEditedBy(editedBy);
-            admin.setEditedAt(java.time.LocalDateTime.now().toString());
-            return adminRepository.save(admin);
-        }
-        return null;
+        Admin admin = adminRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Admin", "id", id));
+        admin.setUsername(username);
+        admin.setEmail(email);
+        admin.setProfilePhotoUrl(profilePhotoUrl);
+        admin.setDepartment(department);
+        admin.setEditedBy(editedBy);
+        admin.setEditedAt(java.time.LocalDateTime.now().toString());
+        return adminRepository.save(admin);
     }
     
     public Admin updateAdminPassword(String id, String password, String editedBy) {
-        Optional<Admin> adminOptional = adminRepository.findById(id);
-        if (adminOptional.isPresent()) {
-            Admin admin = adminOptional.get();
-            admin.setPassword(password);
-            admin.setEditedBy(editedBy);
-            admin.setEditedAt(java.time.LocalDateTime.now().toString());
-            return adminRepository.save(admin);
-        }
-        return null;
+        Admin admin = adminRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Admin", "id", id));
+        admin.setPassword(password);
+        admin.setEditedBy(editedBy);
+        admin.setEditedAt(java.time.LocalDateTime.now().toString());
+        return adminRepository.save(admin);
     }
     
     public Admin updateAdminWithPhotoAndRole(String id, String username, String email, String profilePhotoUrl, String department, String role, String editedBy) {
-        Optional<Admin> adminOptional = adminRepository.findById(id);
-        if (adminOptional.isPresent()) {
-            Admin admin = adminOptional.get();
-            admin.setUsername(username);
-            admin.setEmail(email);
-            if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
-                admin.setProfilePhotoUrl(profilePhotoUrl);
-            }
-            admin.setDepartment(department);
-            if (role != null && !role.isEmpty()) {
-                admin.setRole(role);
-            }
-            admin.setEditedBy(editedBy);
-            admin.setEditedAt(java.time.LocalDateTime.now().toString());
-            return adminRepository.save(admin);
+        Admin admin = adminRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Admin", "id", id));
+        admin.setUsername(username);
+        admin.setEmail(email);
+        if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
+            admin.setProfilePhotoUrl(profilePhotoUrl);
         }
-        return null;
+        admin.setDepartment(department);
+        if (role != null && !role.isEmpty()) {
+            admin.setRole(role);
+        }
+        admin.setEditedBy(editedBy);
+        admin.setEditedAt(java.time.LocalDateTime.now().toString());
+        return adminRepository.save(admin);
     }
     
     public boolean deleteAdmin(String id) {
-        if (adminRepository.existsById(id)) {
-            adminRepository.deleteById(id);
-            return true;
+        if (!adminRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Admin", "id", id);
         }
-        return false;
+        adminRepository.deleteById(id);
+        return true;
     }
     
     public boolean validateAdmin(String email, String password) {

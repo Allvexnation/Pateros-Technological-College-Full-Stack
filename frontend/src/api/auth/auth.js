@@ -50,7 +50,17 @@ export async function login(email, password) {
     }
 }
 
-export function logout() {
+export async function logout() {
+    try {
+        await fetch(`${API_BASE_URL}/logout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    } catch (error) {
+        console.error('Logout API error:', error);
+    }
     localStorage.removeItem('user');
     window.location.hash = '#login';
 }

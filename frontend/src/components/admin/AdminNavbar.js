@@ -1,5 +1,6 @@
 import { AdminStripBar } from './AdminStripBar.js';
-import { getAdminData, adminLogout } from '../../api/auth/token.js';
+import { getAdminData, getAdminToken, removeAdminToken, removeAdminData } from '../../api/auth/token.js';
+import { adminLogout as adminLogoutAPI } from '../../api/admin/AdminAuth/AdminAuth.js';
 
 export function AdminNavbar() {
     return `
@@ -39,7 +40,6 @@ export function AdminNavbar() {
         ${AdminStripBar()}
     </nav>
 
-    <!-- Logout Confirmation Modal -->
     <div id="logoutModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[100]">
         <div class="bg-white rounded-lg p-6 max-w-sm w-full mx-4 shadow-2xl">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Confirm Logout</h3>
@@ -99,14 +99,25 @@ export function initAdminNavbar() {
     }
 
     if (confirmLogout && logoutModal) {
-        confirmLogout.addEventListener('click', () => {
-            adminLogout();
+        confirmLogout.addEventListener('click', async () => {
+            const token = getAdminToken();
+            
+            if (token) {
+                try {
+                    await adminLogoutAPI(token);
+                } catch (error) {
+                    console.error('Logout API error:', error);
+                }
+            }
+            
+            removeAdminToken();
+            removeAdminData();
+            window.location.hash = '#adminlogin';
             logoutModal.classList.add('hidden');
             logoutModal.classList.remove('flex');
         });
     }
 
-    // Close modal when clicking outside
     if (logoutModal) {
         logoutModal.addEventListener('click', (e) => {
             if (e.target === logoutModal) {

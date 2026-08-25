@@ -4,6 +4,7 @@ import { initStudentAnimation } from '../../provider/Student/StudentAnimation.js
 import { isAuthenticated, getCurrentUser, logout } from '../../api/auth/auth.js';
 import { EditStudentProfileModal, initEditStudentProfileModal } from '../../components/modals/EditStudentProfile.js';
 import { getDialogModalHTML } from '../../components/modals/DialogModal.js';
+import { fetchUserData } from '../../api/student/StudentDashboard/StudentDashboard.js';
 
 export function StudentDashboardPage() {
     return `
@@ -138,19 +139,29 @@ export function initStudentDashboardPage() {
     
     const userData = getCurrentUser();
     if (userData) {
-        const username = document.getElementById('username');
-        const email = document.getElementById('email');
-        const profilePhoto = document.getElementById('profilePhoto');
-        const profilePlaceholder = document.getElementById('profilePlaceholder');
-        
-        if (username) username.textContent = userData.username;
-        if (email) email.textContent = userData.email;
-        
-        if (userData.profilePhotoUrl && profilePhoto && profilePlaceholder) {
-            profilePhoto.src = userData.profilePhotoUrl + '?t=' + Date.now();
-            profilePhoto.classList.remove('hidden');
-            profilePlaceholder.classList.add('hidden');
-        }
+        // Fetch fresh data from API
+        fetchUserData(userData.id).then(result => {
+            if (result.success) {
+                const updatedUser = result.user;
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+                
+                const username = document.getElementById('username');
+                const email = document.getElementById('email');
+                const profilePhoto = document.getElementById('profilePhoto');
+                const profilePlaceholder = document.getElementById('profilePlaceholder');
+                
+                if (username) username.textContent = updatedUser.username;
+                if (email) email.textContent = updatedUser.email;
+                
+                if (updatedUser.profilePhotoUrl && profilePhoto && profilePlaceholder) {
+                    profilePhoto.src = updatedUser.profilePhotoUrl + '?t=' + Date.now();
+                    profilePhoto.classList.remove('hidden');
+                    profilePlaceholder.classList.add('hidden');
+                }
+            }
+        }).catch(error => {
+            console.error('Error fetching user data:', error);
+        });
     }
 }
 

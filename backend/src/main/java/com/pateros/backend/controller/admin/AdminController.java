@@ -3,7 +3,7 @@ package com.pateros.backend.controller.admin;
 import com.pateros.backend.model.admin.Admin;
 import com.pateros.backend.service.CloudinaryService;
 import com.pateros.backend.service.admin.AdminService;
-import com.pateros.backend.util.JwtUtil;
+import com.pateros.backend.security.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,12 +20,12 @@ public class AdminController {
     
     private final AdminService adminService;
     private final CloudinaryService cloudinaryService;
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     
-    public AdminController(AdminService adminService, CloudinaryService cloudinaryService, JwtUtil jwtUtil) {
+    public AdminController(AdminService adminService, CloudinaryService cloudinaryService, JwtService jwtService) {
         this.adminService = adminService;
         this.cloudinaryService = cloudinaryService;
-        this.jwtUtil = jwtUtil;
+        this.jwtService = jwtService;
     }
     
     @PostMapping("/login")
@@ -36,7 +36,7 @@ public class AdminController {
             
             if (adminService.validateAdmin(email, password)) {
                 Admin admin = adminService.getAdminByEmail(email).orElse(null);
-                String token = jwtUtil.generateToken(email, admin.getId());
+                String token = jwtService.generateToken(email, admin.getId());
                 
                 Map<String, Object> response = new HashMap<>();
                 response.put("success", true);
@@ -175,9 +175,9 @@ public class AdminController {
     public ResponseEntity<?> createAdmin(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String authHeader) {
         try {
             String token = authHeader.replace("Bearer ", "");
-            String email = jwtUtil.extractUsername(token);
+            String email = jwtService.extractUsername(token);
             
-            if (!jwtUtil.validateToken(token, email)) {
+            if (!jwtService.validateToken(token, email)) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("success", false);
                 response.put("message", "Invalid or expired token");

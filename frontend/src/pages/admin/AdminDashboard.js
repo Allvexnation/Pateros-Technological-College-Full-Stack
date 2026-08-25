@@ -278,7 +278,7 @@ async function loadDashboardData(token) {
 
 function toggleEditForm() {
     const modal = document.getElementById('editModal');
-    const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+    const adminData = getAdminData() || {};
     
     if (modal.classList.contains('hidden')) {
         modal.classList.remove('hidden');
@@ -294,8 +294,8 @@ function toggleEditForm() {
 }
 
 async function saveProfile() {
-    const token = localStorage.getItem('adminToken');
-    const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+    const token = getAdminToken();
+    const adminData = getAdminData() || {};
     
     const username = document.getElementById('editUsername').value;
     const email = document.getElementById('editEmail').value;

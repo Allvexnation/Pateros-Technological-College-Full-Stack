@@ -4,6 +4,7 @@ import { getDialogModalHTML, initDialogModal, showConfirmDialog } from '../../co
 import { AdminNavbar, initAdminNavbar } from '../../components/admin/AdminNavbar.js';
 import { Footer } from '../../components/Footer.js';
 import { getAllAdmins, createAdmin, updateAdmin, deleteAdmin } from '../../api/admin/AdminDashboard/ManageAdmins.js';
+import { getAdminToken, getAdminData } from '../../api/auth/token.js';
 
 export function ManageAdminsPage() {
     return `
@@ -79,8 +80,8 @@ export function ManageAdminsPage() {
 }
 
 export function initManageAdminsPage() {
-    const token = localStorage.getItem('adminToken');
-    const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+    const token = getAdminToken();
+    const adminData = getAdminData() || {};
 
     if (!token) {
         window.location.hash = '#adminlogin';
@@ -211,8 +212,8 @@ function openDeleteAdminModal(id, username) {
 }
 
 async function confirmDeleteAdmin() {
-    const token = localStorage.getItem('adminToken');
-    const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+    const token = getAdminToken();
+    const adminData = getAdminData() || {};
     
     const id = document.getElementById('deleteAdminId').value;
     const superadminPassword = document.getElementById('deleteAdminSuperadminPassword').value;
@@ -257,8 +258,8 @@ async function confirmDeleteAdmin() {
 }
 
 async function saveEditedAdmin() {
-    const token = localStorage.getItem('adminToken');
-    const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+    const token = getAdminToken();
+    const adminData = getAdminData() || {};
     
     const id = document.getElementById('editAdminId').value;
     const username = document.getElementById('editAdminUsername').value;

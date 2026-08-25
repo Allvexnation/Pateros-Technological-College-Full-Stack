@@ -1,6 +1,6 @@
 import { AdminNavbar, initAdminNavbar } from '../../components/admin/AdminNavbar.js';
 import { Footer } from '../../components/Footer.js';
-import { getAdminToken, getAdminData } from '../../api/auth/token.js';
+import { getAdminToken, getAdminData, saveAdminData } from '../../api/auth/token.js';
 
 export function AdminDashboardPage() {
     return `

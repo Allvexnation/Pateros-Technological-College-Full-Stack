@@ -8,12 +8,22 @@ export function AdminNavbar() {
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
                     <img src="public/logo-ptc.png" alt="PTC Logo" class="h-10 w-auto mr-3">
-                    <span class="font-bold text-lg">Pateros Technological College - Admin</span>
+                    <span class="font-bold text-lg hidden md:block">Pateros Technological College - Admin LMS</span>
+                    <span class="font-bold text-lg md:hidden">PTC - Admin LMS</span>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span class="text-sm" id="navUsername">Welcome, Admin</span>
-                    <button id="logoutBtn" class="bg-green-600 hover:bg-green-800 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
-                        Logout
+                    <span class="text-sm hidden md:block" id="navUsername">Welcome, Admin</span>
+                    <div class="md:hidden flex items-center space-x-2">
+                        <img src="" alt="Profile" class="w-8 h-8 rounded-full object-cover border-2 border-green-400 hidden" id="navProfilePhoto">
+                        <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center" id="navProfilePlaceholder">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <button id="logoutBtn" class="bg-green-600 hover:bg-green-800 px-4 py-2 rounded-lg text-sm font-semibold transition-colors hidden md:flex items-center gap-2">
+                        <span>Logout</span>
+                    </button>
+                    <button id="logoutBtnMobile" class="bg-green-600 hover:bg-green-800 p-2 rounded-lg transition-colors md:hidden">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
                     </button>
                     <button id="admin-hamburger-menu" class="text-white hover:bg-green-600 p-2 rounded-lg transition-colors">
                         <svg id="admin-hamburger-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -51,15 +61,31 @@ export function initAdminNavbar() {
     const adminData = getAdminData() || {};
 
     const navUsername = document.getElementById('navUsername');
+    const navProfilePhoto = document.getElementById('navProfilePhoto');
+    const navProfilePlaceholder = document.getElementById('navProfilePlaceholder');
     if (navUsername) navUsername.textContent = `Welcome, ${adminData.username || 'Admin'}`;
+    
+    if (adminData.profilePhotoUrl && navProfilePhoto && navProfilePlaceholder) {
+        navProfilePhoto.src = adminData.profilePhotoUrl;
+        navProfilePhoto.classList.remove('hidden');
+        navProfilePlaceholder.classList.add('hidden');
+    }
 
     const logoutBtn = document.getElementById('logoutBtn');
+    const logoutBtnMobile = document.getElementById('logoutBtnMobile');
     const logoutModal = document.getElementById('logoutModal');
     const cancelLogout = document.getElementById('cancelLogout');
     const confirmLogout = document.getElementById('confirmLogout');
 
     if (logoutBtn && logoutModal) {
         logoutBtn.addEventListener('click', () => {
+            logoutModal.classList.remove('hidden');
+            logoutModal.classList.add('flex');
+        });
+    }
+
+    if (logoutBtnMobile && logoutModal) {
+        logoutBtnMobile.addEventListener('click', () => {
             logoutModal.classList.remove('hidden');
             logoutModal.classList.add('flex');
         });
@@ -143,5 +169,9 @@ export function initAdminNavbar() {
         scrollRight.addEventListener('click', () => {
             tabsContainer.scrollBy({ left: 200, behavior: 'smooth' });
         });
+    }
+
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
     }
 }

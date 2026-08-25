@@ -1,6 +1,7 @@
 import { getAdminToken } from '../../auth/token.js';
+import { API_BASE_URL } from '../../server/api.js';
 
-const API_BASE = 'https://pateros-technological-college-full-stack.onrender.com/api/admin';
+const API_BASE = `${API_BASE_URL}/api/admin`;
 
 export async function getAdminDashboardData() {
     const token = getAdminToken();

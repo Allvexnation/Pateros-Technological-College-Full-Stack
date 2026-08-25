@@ -1,4 +1,6 @@
-const API_BASE_URL = 'https://pateros-technological-college-full-stack.onrender.com/api/auth';
+import { API_BASE_URL as SERVER_API_BASE_URL } from '../server/api.js';
+
+const API_BASE_URL = `${SERVER_API_BASE_URL}/api/auth`;
 
 export async function signup(username, email, password, profilePhotoUrl = '') {
     try {

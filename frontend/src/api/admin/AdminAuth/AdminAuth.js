@@ -1,4 +1,6 @@
-const API_BASE = 'https://pateros-technological-college-full-stack.onrender.com/api/admin';
+import { API_BASE_URL } from '../../server/api.js';
+
+const API_BASE = `${API_BASE_URL}/api/admin`;
 
 export async function adminLogin(email, password) {
     const response = await fetch(`${API_BASE}/login`, {
@@ -43,3 +45,5 @@ export async function getAdminToken() {
     }
     return parsed.token;
 }
+
+export { API_BASE_URL };

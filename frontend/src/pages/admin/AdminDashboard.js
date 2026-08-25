@@ -1,6 +1,7 @@
 import { AdminNavbar, initAdminNavbar } from '../../components/admin/AdminNavbar.js';
 import { Footer } from '../../components/Footer.js';
 import { getAdminToken, getAdminData, saveAdminData } from '../../api/auth/token.js';
+import { API_BASE_URL } from '../../api/server/api.js';
 
 export function AdminDashboardPage() {
     return `
@@ -202,7 +203,7 @@ export function initAdminDashboardPage() {
                 formData.append('file', file);
                 
                 try {
-                    const response = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/admin/upload-photo', {
+                    const response = await fetch(`${API_BASE_URL}/api/admin/upload-photo`, {
                         method: 'POST',
                         body: formData
                     });
@@ -235,7 +236,7 @@ export function initAdminDashboardPage() {
 
 async function loadDashboardData(token) {
     try {
-        const response = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/admin/dashboard', {
+        const response = await fetch(`${API_BASE_URL}/api/admin/dashboard`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -316,7 +317,7 @@ async function saveProfile() {
     const messageDiv = document.getElementById('editMessage');
     
     try {
-        const response = await fetch(`https://pateros-technological-college-full-stack.onrender.com/api/admin/admins/${adminData.id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/admin/admins/${adminData.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

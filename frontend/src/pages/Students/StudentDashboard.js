@@ -2,6 +2,7 @@ import { StudentNavbar, initStudentNavbar } from '../../components/student/Stude
 import { Footer } from '../../components/Footer.js';
 import { initStudentAnimation } from '../../provider/Student/StudentAnimation.js';
 import { isAuthenticated, getCurrentUser, logout } from '../../api/auth/auth.js';
+import { API_BASE_URL } from '../../api/server/api.js';
 
 let editUploadedPhotoUrl = '';
 let selectedPhotoFile = null;
@@ -256,7 +257,7 @@ async function saveProfile() {
         formData.append('file', selectedPhotoFile);
         
         try {
-            const response = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/auth/upload-photo', {
+            const response = await fetch(`${API_BASE_URL}/api/auth/upload-photo`, {
                 method: 'POST',
                 body: formData
             });
@@ -281,7 +282,7 @@ async function saveProfile() {
     messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-blue-100 border border-blue-300 text-blue-700';
     
     try {
-        const response = await fetch(`https://pateros-technological-college-full-stack.onrender.com/api/home/user/${userData.id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/home/user/${userData.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

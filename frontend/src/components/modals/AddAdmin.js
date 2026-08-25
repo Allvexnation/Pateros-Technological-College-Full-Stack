@@ -1,4 +1,5 @@
 import { initStepForm } from '../../utils/steps.js';
+import { API_BASE_URL } from '../../api/server/api.js';
 
 export function getAddAdminModalHTML() {
     return `
@@ -123,7 +124,7 @@ export async function createNewAdmin() {
     }
     
     try {
-        const response = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/admin/admins', {
+        const response = await fetch(`${API_BASE_URL}/api/admin/admins`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

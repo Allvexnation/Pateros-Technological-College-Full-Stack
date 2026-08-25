@@ -1,4 +1,6 @@
-const API_BASE = 'https://pateros-technological-college-full-stack.onrender.com/api/admin';
+import { API_BASE_URL } from '../../server/api.js';
+
+const API_BASE = `${API_BASE_URL}/api/admin`;
 
 export async function getAllAdmins(token) {
     const response = await fetch(`${API_BASE}/admins`, {

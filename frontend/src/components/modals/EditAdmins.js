@@ -1,5 +1,6 @@
 import { initStepForm } from '../../utils/steps.js';
 import { getDialogModalHTML, initDialogModal, showConfirmDialog } from './DialogModal.js';
+import { API_BASE_URL } from '../../api/server/api.js';
 
 export function getEditAdminModalHTML() {
     return `
@@ -244,7 +245,7 @@ export async function saveEditedAdminWithoutPassword() {
             const formData = new FormData();
             formData.append('file', window.editAdminPhotoFile);
             
-            const uploadResponse = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/admin/upload-photo', {
+            const uploadResponse = await fetch(`${API_BASE_URL}/api/admin/upload-photo`, {
                 method: 'POST',
                 body: formData
             });
@@ -261,7 +262,7 @@ export async function saveEditedAdminWithoutPassword() {
             }
         }
         
-        const response = await fetch(`https://pateros-technological-college-full-stack.onrender.com/api/admin/admins/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/admin/admins/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -325,7 +326,7 @@ export async function saveEditedAdminWithPassword(superadminPassword) {
             const formData = new FormData();
             formData.append('file', window.editAdminPhotoFile);
             
-            const uploadResponse = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/admin/upload-photo', {
+            const uploadResponse = await fetch(`${API_BASE_URL}/api/admin/upload-photo`, {
                 method: 'POST',
                 body: formData
             });
@@ -342,7 +343,7 @@ export async function saveEditedAdminWithPassword(superadminPassword) {
             }
         }
         
-        const response = await fetch(`https://pateros-technological-college-full-stack.onrender.com/api/admin/admins/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/admin/admins/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

@@ -31,16 +31,22 @@ export function StudentLoginPage() {
                 <div data-step="2" class="hidden">
                     <div class="mb-4">
                         <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                        <input type="password" id="password" name="password"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                            placeholder="Enter your password">
+                        <div class="relative">
+                            <input type="password" id="password" name="password"
+                                class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+                                placeholder="Enter your password">
+                            <button type="button" id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                                <i data-lucide="eye" id="eyeIcon" class="w-5 h-5"></i>
+                                <i data-lucide="eye-off" id="eyeOffIcon" class="w-5 h-5 hidden"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="flex gap-3">
                         <button type="button" data-action="prev"
                             class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
                             Back
                         </button>
-                        <button type="submit" data-action="submit"
+                        <button type="submit" data-action="submit" id="loginButton"
                             class="flex-1 bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg">
                             Login
                         </button>
@@ -65,6 +71,8 @@ export function StudentLoginPage() {
 }
 
 export function initStudentLoginPage() {
+    document.body.classList.remove('admin-page', 'student-page');
+    
     initLoginAnimations();
     
     const errorDiv = document.getElementById('errorMessage');
@@ -93,11 +101,18 @@ export function initStudentLoginPage() {
         
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        const loginButton = document.getElementById('loginButton');
         
         errorDiv.classList.add('hidden');
         successDiv.classList.add('hidden');
         
+        loginButton.disabled = true;
+        loginButton.textContent = 'Logging in...';
+        
         const result = await login(email, password);
+        
+        loginButton.disabled = false;
+        loginButton.textContent = 'Login';
         
         if (result.success) {
             successDiv.textContent = 'Login successful! Redirecting...';
@@ -108,6 +123,25 @@ export function initStudentLoginPage() {
         } else {
             errorDiv.textContent = result.message;
             errorDiv.classList.remove('hidden');
+        }
+    });
+    
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    const eyeIcon = document.getElementById('eyeIcon');
+    const eyeOffIcon = document.getElementById('eyeOffIcon');
+    
+    lucide.createIcons();
+    
+    togglePassword.addEventListener('click', () => {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.classList.add('hidden');
+            eyeOffIcon.classList.remove('hidden');
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.classList.remove('hidden');
+            eyeOffIcon.classList.add('hidden');
         }
     });
 }

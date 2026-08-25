@@ -1,5 +1,6 @@
 import { initStepForm } from '../../utils/steps.js';
 import { API_BASE_URL } from '../../api/server/api.js';
+import { getAdminData, getAdminToken } from '../../api/auth/token.js';
 
 export function getAddAdminModalHTML() {
     return `
@@ -100,8 +101,12 @@ export function closeAddAdminModal() {
 }
 
 export async function createNewAdmin() {
-    const token = localStorage.getItem('adminToken');
-    const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+    const token = getAdminToken();
+    const adminData = getAdminData() || {};
+    const saveButton = document.querySelector('#addAdminModal button[data-action="submit"]');
+    
+    console.log('Admin data:', adminData);
+    console.log('Admin role:', adminData.role);
     
     if (adminData.role !== 'superadmin') {
         alert('Only superadmins can create new admins');
@@ -123,6 +128,11 @@ export async function createNewAdmin() {
         return;
     }
     
+    if (saveButton) {
+        saveButton.textContent = 'Saving changes...';
+        saveButton.disabled = true;
+    }
+    
     try {
         const response = await fetch(`${API_BASE_URL}/api/admin/admins`, {
             method: 'POST',
@@ -140,6 +150,11 @@ export async function createNewAdmin() {
             messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-green-100 border border-green-300 text-green-700';
             messageDiv.classList.remove('hidden');
             
+            if (saveButton) {
+                saveButton.textContent = 'Create Admin';
+                saveButton.disabled = false;
+            }
+            
             if (window.loadAdminsList) {
                 window.loadAdminsList(token);
             }
@@ -152,11 +167,21 @@ export async function createNewAdmin() {
             messageDiv.textContent = data.message || 'Failed to create admin';
             messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
             messageDiv.classList.remove('hidden');
+            
+            if (saveButton) {
+                saveButton.textContent = 'Create Admin';
+                saveButton.disabled = false;
+            }
         }
     } catch (error) {
         messageDiv.textContent = 'Error creating admin: ' + error.message;
         messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
         messageDiv.classList.remove('hidden');
+        
+        if (saveButton) {
+            saveButton.textContent = 'Create Admin';
+            saveButton.disabled = false;
+        }
     }
 }
 

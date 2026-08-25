@@ -229,6 +229,7 @@ export async function confirmPasswordAndSave() {
 export async function saveEditedAdminWithoutPassword() {
     const token = localStorage.getItem('adminToken');
     const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+    const saveButton = document.querySelector('#editAdminModal button[data-action="submit"]');
     
     const id = document.getElementById('editAdminId').value;
     const username = document.getElementById('editAdminUsername').value;
@@ -239,8 +240,12 @@ export async function saveEditedAdminWithoutPassword() {
     
     let profilePhotoUrl = window.editAdminUploadedPhotoUrl;
     
+    if (saveButton) {
+        saveButton.textContent = 'Saving changes...';
+        saveButton.disabled = true;
+    }
+    
     try {
-        // Upload photo to Cloudinary if a new file was selected
         if (window.editAdminPhotoFile) {
             const formData = new FormData();
             formData.append('file', window.editAdminPhotoFile);
@@ -258,6 +263,11 @@ export async function saveEditedAdminWithoutPassword() {
                 messageDiv.textContent = 'Failed to upload photo: ' + uploadData.message;
                 messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
                 messageDiv.classList.remove('hidden');
+                
+                if (saveButton) {
+                    saveButton.textContent = 'Save Changes';
+                    saveButton.disabled = false;
+                }
                 return;
             }
         }
@@ -286,6 +296,11 @@ export async function saveEditedAdminWithoutPassword() {
             messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-green-100 border border-green-300 text-green-700';
             messageDiv.classList.remove('hidden');
             
+            if (saveButton) {
+                saveButton.textContent = 'Save Changes';
+                saveButton.disabled = false;
+            }
+            
             if (window.loadAdminsList) {
                 window.loadAdminsList(token);
             }
@@ -298,17 +313,28 @@ export async function saveEditedAdminWithoutPassword() {
             messageDiv.textContent = data.message || 'Failed to update admin';
             messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
             messageDiv.classList.remove('hidden');
+            
+            if (saveButton) {
+                saveButton.textContent = 'Save Changes';
+                saveButton.disabled = false;
+            }
         }
     } catch (error) {
         messageDiv.textContent = 'Error updating admin: ' + error.message;
         messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
         messageDiv.classList.remove('hidden');
+        
+        if (saveButton) {
+            saveButton.textContent = 'Save Changes';
+            saveButton.disabled = false;
+        }
     }
 }
 
 export async function saveEditedAdminWithPassword(superadminPassword) {
     const token = localStorage.getItem('adminToken');
     const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
+    const confirmButton = document.querySelector('#passwordConfirmModal button:last-child');
     
     const id = document.getElementById('editAdminId').value;
     const username = document.getElementById('editAdminUsername').value;
@@ -320,8 +346,12 @@ export async function saveEditedAdminWithPassword(superadminPassword) {
     
     let profilePhotoUrl = window.editAdminUploadedPhotoUrl;
     
+    if (confirmButton) {
+        confirmButton.textContent = 'Saving changes...';
+        confirmButton.disabled = true;
+    }
+    
     try {
-        // Upload photo to Cloudinary if a new file was selected
         if (window.editAdminPhotoFile) {
             const formData = new FormData();
             formData.append('file', window.editAdminPhotoFile);
@@ -339,6 +369,11 @@ export async function saveEditedAdminWithPassword(superadminPassword) {
                 messageDiv.textContent = 'Failed to upload photo: ' + uploadData.message;
                 messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
                 messageDiv.classList.remove('hidden');
+                
+                if (confirmButton) {
+                    confirmButton.textContent = 'Confirm & Save';
+                    confirmButton.disabled = false;
+                }
                 return;
             }
         }
@@ -376,10 +411,20 @@ export async function saveEditedAdminWithPassword(superadminPassword) {
             messageDiv.textContent = data.message || 'Failed to update admin';
             messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
             messageDiv.classList.remove('hidden');
+            
+            if (confirmButton) {
+                confirmButton.textContent = 'Confirm & Save';
+                confirmButton.disabled = false;
+            }
         }
     } catch (error) {
         messageDiv.textContent = 'Error updating admin: ' + error.message;
         messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
         messageDiv.classList.remove('hidden');
+        
+        if (confirmButton) {
+            confirmButton.textContent = 'Confirm & Save';
+            confirmButton.disabled = false;
+        }
     }
 }

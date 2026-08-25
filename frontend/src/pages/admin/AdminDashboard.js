@@ -297,6 +297,17 @@ async function saveProfile() {
     const token = getAdminToken();
     const adminData = getAdminData() || {};
     
+    if (!adminData.id) {
+        const messageDiv = document.getElementById('editMessage');
+        messageDiv.textContent = 'Error: Admin data not found. Please login again.';
+        messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
+        messageDiv.classList.remove('hidden');
+        setTimeout(() => {
+            window.location.hash = '#adminlogin';
+        }, 2000);
+        return;
+    }
+    
     const username = document.getElementById('editUsername').value;
     const email = document.getElementById('editEmail').value;
     const department = document.getElementById('editDepartment').value;

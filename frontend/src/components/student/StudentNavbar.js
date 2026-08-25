@@ -1,5 +1,5 @@
 import { StudentStripBar } from './StudentStripbar.js';
-import { getUserData, logout } from '../../api/auth/token.js';
+import { getCurrentUser, logout } from '../../api/auth/auth.js';
 
 export function StudentNavbar() {
     return `
@@ -47,7 +47,7 @@ export function StudentNavbar() {
 }
 
 export function initStudentNavbar() {
-    const userData = getUserData() || {};
+    const userData = getCurrentUser() || {};
 
     const navUsername = document.getElementById('navUsername');
     if (navUsername) navUsername.textContent = `Welcome, ${userData.username || 'Student'}`;

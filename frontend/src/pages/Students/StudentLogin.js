@@ -1,7 +1,6 @@
-import { login } from '../../api/student/StudentAuth/StudentLogin.js';
+import { login } from '../../api/auth/auth.js';
 import { initLoginAnimations } from '../../provider/LoginAnimation.js';
 import { initStepForm } from '../../utils/steps.js';
-import { saveToken, saveUserData } from '../../api/auth/token.js';
 
 export function StudentLoginPage() {
     return `
@@ -101,8 +100,6 @@ export function initStudentLoginPage() {
         const result = await login(email, password);
         
         if (result.success) {
-            saveToken(result.token);
-            saveUserData(result.user);
             successDiv.textContent = 'Login successful! Redirecting...';
             successDiv.classList.remove('hidden');
             setTimeout(() => {

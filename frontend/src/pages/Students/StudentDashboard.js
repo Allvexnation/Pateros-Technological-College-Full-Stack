@@ -1,8 +1,8 @@
 import { StudentNavbar, initStudentNavbar } from '../../components/student/StudentNavbar.js';
 import { Footer } from '../../components/Footer.js';
-import { initializeStudentDashboard, editUploadedPhotoUrl } from '../../api/student/StudentDashboard/StudentDashboard.js';
+import { editUploadedPhotoUrl } from '../../api/student/StudentDashboard/StudentDashboard.js';
 import { initStudentAnimation } from '../../provider/Student/StudentAnimation.js';
-import { isAuthenticated, logout, getUserData } from '../../api/auth/token.js';
+import { isAuthenticated, getCurrentUser, logout } from '../../api/auth/auth.js';
 
 export function StudentDashboardPage() {
     return `
@@ -169,10 +169,9 @@ export function initStudentDashboardPage() {
     document.body.classList.add('student-page');
     
     initStudentAnimation();
-    initializeStudentDashboard();
     initStudentNavbar();
     
-    const userData = getUserData();
+    const userData = getCurrentUser();
     if (userData) {
         const username = document.getElementById('username');
         const email = document.getElementById('email');
@@ -221,7 +220,7 @@ export function initStudentDashboardPage() {
 
 function toggleEditForm() {
     const modal = document.getElementById('editModal');
-    const userData = getUserData() || {};
+    const userData = getCurrentUser() || {};
     
     if (modal.classList.contains('hidden')) {
         modal.classList.remove('hidden');
@@ -236,7 +235,7 @@ function toggleEditForm() {
 }
 
 async function saveProfile() {
-    const userData = getUserData() || {};
+    const userData = getCurrentUser() || {};
     
     const username = document.getElementById('editUsername').value;
     const email = document.getElementById('editEmail').value;

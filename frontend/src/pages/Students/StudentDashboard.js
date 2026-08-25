@@ -237,6 +237,17 @@ function toggleEditForm() {
 async function saveProfile() {
     const userData = getCurrentUser() || {};
     
+    if (!userData.id) {
+        const messageDiv = document.getElementById('editMessage');
+        messageDiv.textContent = 'Error: User data not found. Please login again.';
+        messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
+        messageDiv.classList.remove('hidden');
+        setTimeout(() => {
+            window.location.hash = '#studentlogin';
+        }, 2000);
+        return;
+    }
+    
     const username = document.getElementById('editUsername').value;
     const email = document.getElementById('editEmail').value;
     const profilePhotoUrl = editUploadedPhotoUrl || userData.profilePhotoUrl;
@@ -244,7 +255,7 @@ async function saveProfile() {
     const messageDiv = document.getElementById('editMessage');
     
     try {
-        const response = await fetch(`https://pateros-technological-college-full-stack.onrender.com/api/auth/students/${userData.id}`, {
+        const response = await fetch(`https://pateros-technological-college-full-stack.onrender.com/api/home/user/${userData.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -255,6 +266,8 @@ async function saveProfile() {
         const data = await response.json();
         
         if (data.success) {
+            localStorage.setItem('user', JSON.stringify(data.user));
+            
             document.getElementById('username').textContent = username;
             document.getElementById('email').textContent = email;
             

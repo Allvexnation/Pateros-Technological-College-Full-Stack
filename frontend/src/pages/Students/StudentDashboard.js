@@ -1,8 +1,10 @@
 import { StudentNavbar, initStudentNavbar } from '../../components/student/StudentNavbar.js';
 import { Footer } from '../../components/Footer.js';
-import { editUploadedPhotoUrl } from '../../api/student/StudentDashboard/StudentDashboard.js';
 import { initStudentAnimation } from '../../provider/Student/StudentAnimation.js';
 import { isAuthenticated, getCurrentUser, logout } from '../../api/auth/auth.js';
+
+let editUploadedPhotoUrl = '';
+let selectedPhotoFile = null;
 
 export function StudentDashboardPage() {
     return `
@@ -182,34 +184,17 @@ export function initStudentDashboardPage() {
 
     const editPhotoInput = document.getElementById('editPhotoInput');
     if (editPhotoInput) {
-        editPhotoInput.addEventListener('change', async (e) => {
+        editPhotoInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
+                selectedPhotoFile = file;
                 const preview = document.getElementById('editPhotoPreview');
-                preview.innerHTML = '<span>Uploading...</span>';
                 
-                const formData = new FormData();
-                formData.append('file', file);
-                
-                try {
-                    const response = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/auth/upload-photo', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        editUploadedPhotoUrl = data.photoUrl;
-                        preview.innerHTML = `<img src="${editUploadedPhotoUrl}" alt="Profile photo">`;
-                    } else {
-                        preview.innerHTML = '<span>Upload failed</span>';
-                        alert('Failed to upload photo: ' + data.message);
-                    }
-                } catch (error) {
-                    preview.innerHTML = '<span>Upload failed</span>';
-                    alert('Error uploading photo: ' + error.message);
-                }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Profile photo preview">`;
+                };
+                reader.readAsDataURL(file);
             }
         });
     }
@@ -250,9 +235,42 @@ async function saveProfile() {
     
     const username = document.getElementById('editUsername').value;
     const email = document.getElementById('editEmail').value;
-    const profilePhotoUrl = editUploadedPhotoUrl || userData.profilePhotoUrl;
-    
     const messageDiv = document.getElementById('editMessage');
+    
+    let profilePhotoUrl = userData.profilePhotoUrl || '';
+    
+    if (selectedPhotoFile) {
+        messageDiv.textContent = 'Uploading photo...';
+        messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-blue-100 border border-blue-300 text-blue-700';
+        messageDiv.classList.remove('hidden');
+        
+        const formData = new FormData();
+        formData.append('file', selectedPhotoFile);
+        
+        try {
+            const response = await fetch('https://pateros-technological-college-full-stack.onrender.com/api/auth/upload-photo', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                profilePhotoUrl = data.photoUrl;
+            } else {
+                messageDiv.textContent = 'Failed to upload photo: ' + data.message;
+                messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
+                return;
+            }
+        } catch (error) {
+            messageDiv.textContent = 'Error uploading photo: ' + error.message;
+            messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
+            return;
+        }
+    }
+    
+    messageDiv.textContent = 'Updating profile...';
+    messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-blue-100 border border-blue-300 text-blue-700';
     
     try {
         const response = await fetch(`https://pateros-technological-college-full-stack.onrender.com/api/home/user/${userData.id}`, {
@@ -283,9 +301,9 @@ async function saveProfile() {
             
             messageDiv.textContent = 'Profile updated successfully!';
             messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-green-100 border border-green-300 text-green-700';
-            messageDiv.classList.remove('hidden');
             
-            editUploadedPhotoUrl = null;
+            selectedPhotoFile = null;
+            editUploadedPhotoUrl = '';
             
             setTimeout(() => {
                 toggleEditForm();
@@ -294,11 +312,9 @@ async function saveProfile() {
         } else {
             messageDiv.textContent = data.message || 'Failed to update profile';
             messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
-            messageDiv.classList.remove('hidden');
         }
     } catch (error) {
         messageDiv.textContent = 'Error updating profile: ' + error.message;
         messageDiv.className = 'mt-4 p-3 rounded-lg text-sm bg-red-100 border border-red-300 text-red-700';
-        messageDiv.classList.remove('hidden');
     }
 }

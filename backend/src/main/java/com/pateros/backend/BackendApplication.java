@@ -7,6 +7,8 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
+@SuppressWarnings("unused")
+
 public class BackendApplication {
 
 	public static void main(String[] args) {

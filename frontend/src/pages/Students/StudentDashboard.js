@@ -177,9 +177,17 @@ export function initStudentDashboardPage() {
     if (userData) {
         const username = document.getElementById('username');
         const email = document.getElementById('email');
+        const profilePhoto = document.getElementById('profilePhoto');
+        const profilePlaceholder = document.getElementById('profilePlaceholder');
         
         if (username) username.textContent = userData.username;
         if (email) email.textContent = userData.email;
+        
+        if (userData.profilePhotoUrl && profilePhoto && profilePlaceholder) {
+            profilePhoto.src = userData.profilePhotoUrl + '?t=' + Date.now();
+            profilePhoto.classList.remove('hidden');
+            profilePlaceholder.classList.add('hidden');
+        }
     }
 
     const editPhotoInput = document.getElementById('editPhotoInput');

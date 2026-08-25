@@ -33,8 +33,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
             "https://paterostechnologicalcollege.vercel.app",
             "https://paterostechnologicalcollege.netlify.app",
-            "http://127.0.0.2:5500",
-            "http://127.0.0.2:5501"
+            "https://fsc7d382-5500.asse.devtunnels.ms",
+            "https://fsc7d382-5501.asse.devtunnels.ms"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
